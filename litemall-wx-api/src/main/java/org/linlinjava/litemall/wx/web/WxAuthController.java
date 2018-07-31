@@ -2,12 +2,10 @@ package org.linlinjava.litemall.wx.web;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import me.chanjar.weixin.common.exception.WxErrorException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.NotifyType;
-import org.linlinjava.litemall.core.notify.SmsResult;
 import org.linlinjava.litemall.core.util.CharUtil;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.RegexUtil;
@@ -137,7 +135,7 @@ public class WxAuthController {
             WxMaJscode2SessionResult result = this.wxService.getUserService().getSessionInfo(code);
             sessionKey = result.getSessionKey();
             openId = result.getOpenid();
-        } catch (WxErrorException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -189,7 +187,7 @@ public class WxAuthController {
         String phoneNumber = JacksonUtil.parseString(body, "mobile");
         String code = CharUtil.getRandomNum(6);
 
-        notifyService.notifySmsTemplateSync(phoneNumber, NotifyType.CAPTCHA, new String[]{code});
+        notifyService.notifySmsTemplate(phoneNumber, NotifyType.CAPTCHA, new String[]{code});
 
         boolean successful = CaptchaCodeManager.addToCache(phoneNumber, code);
         return successful ? ResponseUtil.ok() : ResponseUtil.badArgument();

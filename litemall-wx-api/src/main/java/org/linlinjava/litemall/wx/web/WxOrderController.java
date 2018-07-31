@@ -548,7 +548,7 @@ public class WxOrderController {
             String orderSn = result.getOutTradeNo();
             String payId = result.getTransactionId();
             // 分转化成元
-            String totalFee = BaseWxPayResult.feeToYuan(result.getTotalFee());
+            String totalFee = BaseWxPayResult.fenToYuan(result.getTotalFee());
 
             LitemallOrder order = orderService.findBySn(orderSn);
             if (order == null) {
@@ -591,7 +591,7 @@ public class WxOrderController {
                     order.getAddress()
             };
 
-            notifyService.notifyWxTemplate(result.getOpenid(), NotifyType.PAY_SUCCEED, parms, "/pages/index/index?orderId=" + order.getId());
+            notifyService.notifyWxTemplate(result.getOpenid(), NotifyType.PAY_SUCCEED, parms, "pages/index/index?orderId=" + order.getId());
 
             return WxPayNotifyResponse.success("处理成功!");
         } catch (Exception e) {
